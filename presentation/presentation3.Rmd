@@ -1,0 +1,77 @@
+---
+title: "Shiny Application and Reproducible Pitch"
+author: "Gabriel Lages"
+date: "17 de setembro de 2016"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Slide 1 - Overview
+
+This presentation is part of Cousera Course Project:
+Shiny Application and Reproducible Pitch
+
+The focus of the project is explore Data Visualization tools with R.
+
+To visualize the data we created an application with shiny, you can access
+the application [here](https://gabrielclages.shinyapps.io/ShinyApp_Fiscal_Study/), or clicking the link below.
+
+Shiny App: https://gabrielclages.shinyapps.io/ShinyApp_Fiscal_Study/ 
+
+You can find more information about the application and all codes that I used on my [github](https://github.com/gabrielclages/ShinyApp_Fiscal_Study)
+
+
+## Slide 2 - Preparing Data
+
+Currently in Brazil one of the most widely discussed topic in political is the "fiscal pedaling" practiced by the federal government during the year of 2014.
+
+To this study I collected data from [TCU](http://portal.tcu.gov.br/english/home.htm) (The Federal Court of Accounts of Brazil)
+
+First step is to install packages, upload and prepare the dataset
+
+```{r, message=FALSE}
+library(dplyr)
+library(RCurl)
+library(dygraphs)
+library(DT)
+library(ggplot2)
+
+x <- getURL("https://raw.githubusercontent.com/gabrielclages/Course-Project-Fiscal-Study/master/Dataset_Fiscal_Study.csv")
+
+dataset <- read.csv(text = x, sep = ";", nrows=260)
+# Creating a Time Series of the Data 
+myts <- ts(dataset$Balance, start=c(1994, 1), end=c(2015, 8), frequency=12)
+
+dataset$Balance <- format(dataset$Balance,justify = "right", big.mark=',', scientific=FALSE)
+
+```
+
+## Slide 3 - Summarizing Data
+
+```{r, message=FALSE}
+
+summary(dataset)
+
+```
+
+## Slide 4 - Time series
+
+This is the time series that we plot and explore in the application
+
+```{r, message=FALSE}
+plot(myts)
+```
+
+## Slide 5 - Application
+
+To display the understanding of using shiny to build an application, an application has been developed and deployed at: https://gabrielclages.shinyapps.io/ShinyApp_Fiscal_Study/
+
+The application allows the user to:
+
+- Analyze the dataset in an interactive table
+- Analyze the brazilian government balance time series in an interactive chart
+
+Read the source at: https://github.com/gabrielclages/ShinyApp_Fiscal_Study
